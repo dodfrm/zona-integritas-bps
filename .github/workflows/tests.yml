@@ -13,6 +13,27 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    # ZI-TERPADU targets MySQL (InnoDB); `composer setup` migrates against this service.
+    # The automated test suite itself still runs on in-memory SQLite (phpunit.xml).
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: zi_terpadu
+          MYSQL_USER: zi_terpadu
+          MYSQL_PASSWORD: ci-password
+          MYSQL_ROOT_PASSWORD: ci-root-password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DB_PASSWORD: ci-password
+
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

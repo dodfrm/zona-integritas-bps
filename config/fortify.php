@@ -160,8 +160,8 @@ return [
     |
     */
 
+    // Public self-registration is disabled: accounts are created by administrators.
     'features' => [
-        Features::registration(),
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::twoFactorAuthentication([
