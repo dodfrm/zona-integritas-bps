@@ -5,13 +5,16 @@ export type User = {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
+    organization: { id: number; name: string; type: string } | null;
+    access_scope: string;
+    roles: string[];
     created_at: string;
     updated_at: string;
-    [key: string]: unknown;
 };
 
 export type Auth = {
     user: User;
+    permissions: string[];
 };
 
 export type Passkey = {

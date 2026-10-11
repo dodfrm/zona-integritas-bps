@@ -17,24 +17,24 @@
 
 ### Color Palette
 
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#0F172A` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary | `#334155` | `--color-secondary` |
-| On Secondary | `#FFFFFF` | `--color-on-secondary` |
-| Accent/CTA | `#0369A1` | `--color-accent` |
-| On Accent/CTA | `#FFFFFF` | `--color-on-accent` |
-| Background | `#F8FAFC` | `--color-background` |
-| Foreground | `#020617` | `--color-foreground` |
-| Card | `#FFFFFF` | `--color-card` |
-| Card Foreground | `#020617` | `--color-card-foreground` |
-| Muted | `#E8ECF1` | `--color-muted` |
+| Role             | Hex       | CSS Variable               |
+| ---------------- | --------- | -------------------------- |
+| Primary          | `#0F172A` | `--color-primary`          |
+| On Primary       | `#FFFFFF` | `--color-on-primary`       |
+| Secondary        | `#334155` | `--color-secondary`        |
+| On Secondary     | `#FFFFFF` | `--color-on-secondary`     |
+| Accent/CTA       | `#0369A1` | `--color-accent`           |
+| On Accent/CTA    | `#FFFFFF` | `--color-on-accent`        |
+| Background       | `#F8FAFC` | `--color-background`       |
+| Foreground       | `#020617` | `--color-foreground`       |
+| Card             | `#FFFFFF` | `--color-card`             |
+| Card Foreground  | `#020617` | `--color-card-foreground`  |
+| Muted            | `#E8ECF1` | `--color-muted`            |
 | Muted Foreground | `#475569` | `--color-muted-foreground` |
-| Border | `#E2E8F0` | `--color-border` |
-| Destructive | `#DC2626` | `--color-destructive` |
-| On Destructive | `#FFFFFF` | `--color-on-destructive` |
-| Ring | `#0F172A` | `--color-ring` |
+| Border           | `#E2E8F0` | `--color-border`           |
+| Destructive      | `#DC2626` | `--color-destructive`      |
+| On Destructive   | `#FFFFFF` | `--color-on-destructive`   |
+| Ring             | `#0F172A` | `--color-ring`             |
 
 **Color Notes:** High contrast navy + blue
 
@@ -46,31 +46,32 @@
 - **Google Fonts:** [Atkinson Hyperlegible + Atkinson Hyperlegible](https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap)
 
 **CSS Import:**
+
 ```css
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap');
 ```
 
 ### Spacing Variables
 
-*Density: 8/10 — Dense / Dashboard*
+_Density: 8/10 — Dense / Dashboard_
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--space-xs` | `2px` / `0.125rem` | Tight gaps |
-| `--space-sm` | `4px` / `0.25rem` | Icon gaps, inline spacing |
-| `--space-md` | `8px` / `0.5rem` | Standard padding |
-| `--space-lg` | `12px` / `0.75rem` | Section padding |
-| `--space-xl` | `16px` / `1rem` | Large gaps |
-| `--space-2xl` | `24px` / `1.5rem` | Section margins |
-| `--space-3xl` | `32px` / `2rem` | Hero padding |
+| Token         | Value              | Usage                     |
+| ------------- | ------------------ | ------------------------- |
+| `--space-xs`  | `2px` / `0.125rem` | Tight gaps                |
+| `--space-sm`  | `4px` / `0.25rem`  | Icon gaps, inline spacing |
+| `--space-md`  | `8px` / `0.5rem`   | Standard padding          |
+| `--space-lg`  | `12px` / `0.75rem` | Section padding           |
+| `--space-xl`  | `16px` / `1rem`    | Large gaps                |
+| `--space-2xl` | `24px` / `1.5rem`  | Section margins           |
+| `--space-3xl` | `32px` / `2rem`    | Hero padding              |
 
 ### Shadow Depths
 
-| Level | Value | Usage |
-|-------|-------|-------|
-| `--shadow-sm` | `0 1px 2px rgba(0,0,0,0.05)` | Subtle lift |
-| `--shadow-md` | `0 4px 6px rgba(0,0,0,0.1)` | Cards, buttons |
-| `--shadow-lg` | `0 10px 15px rgba(0,0,0,0.1)` | Modals, dropdowns |
+| Level         | Value                          | Usage                       |
+| ------------- | ------------------------------ | --------------------------- |
+| `--shadow-sm` | `0 1px 2px rgba(0,0,0,0.05)`   | Subtle lift                 |
+| `--shadow-md` | `0 4px 6px rgba(0,0,0,0.1)`    | Cards, buttons              |
+| `--shadow-lg` | `0 10px 15px rgba(0,0,0,0.1)`  | Modals, dropdowns           |
 | `--shadow-xl` | `0 20px 25px rgba(0,0,0,0.15)` | Hero images, featured cards |
 
 ---
@@ -82,30 +83,30 @@
 ```css
 /* Primary Button */
 .btn-primary {
-  background: #0369A1;
-  color: #FFFFFF;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
+    background: #0369a1;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 200ms ease;
+    cursor: pointer;
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
 /* Secondary Button */
 .btn-secondary {
-  background: transparent;
-  color: #0F172A;
-  border: 2px solid #0F172A;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
+    background: transparent;
+    color: #0f172a;
+    border: 2px solid #0f172a;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 200ms ease;
+    cursor: pointer;
 }
 ```
 
@@ -113,17 +114,17 @@
 
 ```css
 .card {
-  background: #F8FAFC;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: all 200ms ease;
-  cursor: pointer;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    transition: all 200ms ease;
+    cursor: pointer;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
 }
 ```
 
@@ -131,17 +132,17 @@
 
 ```css
 .input {
-  padding: 12px 16px;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 200ms ease;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 200ms ease;
 }
 
 .input:focus {
-  border-color: #0F172A;
-  outline: none;
-  box-shadow: 0 0 0 3px #0F172A20;
+    border-color: #0f172a;
+    outline: none;
+    box-shadow: 0 0 0 3px #0f172a20;
 }
 ```
 
@@ -149,17 +150,17 @@
 
 ```css
 .modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
 }
 
 .modal {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
-  max-width: 500px;
-  width: 90%;
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--shadow-xl);
+    max-width: 500px;
+    width: 90%;
 }
 ```
 
@@ -190,7 +191,17 @@
 **Scroll Reveal** (Subtle) — Trigger: scroll (viewport enter) | Duration: 300-400ms | Easing: `power1.out`
 
 ```js
-gsap.from(el, { opacity: 0, y: 12, duration: 0.35, ease: 'power1.out', scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none reverse' } });
+gsap.from(el, {
+    opacity: 0,
+    y: 12,
+    duration: 0.35,
+    ease: 'power1.out',
+    scrollTrigger: {
+        trigger: el,
+        start: 'top 90%',
+        toggleActions: 'play none none reverse',
+    },
+});
 ```
 
 **Framework notes:** Requires the ScrollTrigger plugin registered once via gsap.registerPlugin(ScrollTrigger); Use matchMedia('(prefers-reduced-motion: reduce)') to skip non-essential motion and render the final state immediately
