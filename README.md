@@ -14,18 +14,19 @@ Aplikasi membantu transparansi proses, keterlacakan aktivitas, dan konsistensi d
 2. [Status implementasi](#status-implementasi)
 3. [Persyaratan environment](#persyaratan-environment)
 4. [Instalasi](#instalasi)
-5. [Akun awal, role, organisasi, dan cakupan](#akun-awal-role-organisasi-dan-cakupan)
-6. [Modul](#modul)
-7. [Alur verifikasi yang diimplementasikan](#alur-verifikasi-yang-diimplementasikan)
-8. [Penyimpanan berkas bukti dukung](#penyimpanan-berkas-bukti-dukung)
-9. [Data historis, versioning, dan pengarsipan](#data-historis-versioning-dan-pengarsipan)
-10. [Arsitektur & basis data](#arsitektur--basis-data)
-11. [Keamanan](#keamanan)
-12. [Batasan MVP](#batasan-mvp)
-13. [Rencana pengembangan provinsi & pusat](#rencana-pengembangan-provinsi--pusat)
-14. [Plugin & skill agent (Ponytail, UI/UX Pro Max)](#plugin--skill-agent)
-15. [Pemeriksaan teknis](#pemeriksaan-teknis)
-16. [Checklist pengujian manual](#checklist-pengujian-manual)
+5. [Menjalankan dengan Docker](#menjalankan-dengan-docker)
+6. [Akun awal, role, organisasi, dan cakupan](#akun-awal-role-organisasi-dan-cakupan)
+7. [Modul](#modul)
+8. [Alur verifikasi yang diimplementasikan](#alur-verifikasi-yang-diimplementasikan)
+9. [Penyimpanan berkas bukti dukung](#penyimpanan-berkas-bukti-dukung)
+10. [Data historis, versioning, dan pengarsipan](#data-historis-versioning-dan-pengarsipan)
+11. [Arsitektur & basis data](#arsitektur--basis-data)
+12. [Keamanan](#keamanan)
+13. [Batasan MVP](#batasan-mvp)
+14. [Rencana pengembangan provinsi & pusat](#rencana-pengembangan-provinsi--pusat)
+15. [Plugin & skill agent (Ponytail, UI/UX Pro Max)](#plugin--skill-agent)
+16. [Pemeriksaan teknis](#pemeriksaan-teknis)
+17. [Checklist pengujian manual](#checklist-pengujian-manual)
 
 ---
 
@@ -76,7 +77,7 @@ Tidak memakai Filament, Laravel Shield, atau frontend terpisah.
 
 ## Persyaratan environment
 
-- **PHP ≥ 8.4.1** — `composer.lock` saat ini mengunci paket Symfony 8 yang mensyaratkan PHP 8.4.1+ (meski `composer.json` menulis `^8.3`). CI memakai PHP 8.5. Ekstensi: `pdo_mysql`, `mbstring`, `fileinfo` (wajib untuk deteksi tipe berkas), `intl`, `openssl`, `zip`.
+- **PHP ≥ 8.4.1** — `composer.lock` saat ini mengunci paket Symfony 8 yang mensyaratkan PHP 8.4.1+ (meski `composer.json` menulis `^8.3`). CI memakai PHP 8.5. Ekstensi: `pdo_mysql`, `fileinfo` (wajib untuk deteksi tipe berkas), `mbstring`, `openssl`, dan ekstensi standar Laravel lainnya (cek dengan `composer check-platform-reqs`).
 - Composer 2.
 - Node.js 22 + npm.
 - **MySQL 8.x (InnoDB)**. Migration juga sudah diverifikasi di MariaDB 10.11; MySQL 8 sendiri dipakai di CI tetapi belum dijalankan langsung oleh pengembang.
@@ -172,6 +173,66 @@ Notifikasi dikirim langsung (tidak memerlukan queue worker), tetapi `QUEUE_CONNE
 ### 6. Production checklist singkat
 
 `APP_ENV=production`, `APP_DEBUG=false`, HTTPS, `php artisan config:cache route:cache view:cache`, cron scheduler, backup database **dan** folder `storage/app/private/evidence`.
+
+## Menjalankan dengan Docker
+
+Alternatif instalasi tanpa memasang PHP/Node/MySQL di host. Satu `docker compose up` menjalankan tiga layanan:
+
+| Layanan     | Isi                                                                                                                |
+| ----------- | ------------------------------------------------------------------------------------------------------------------ |
+| `app`       | Apache + PHP 8.4 dengan kode, `vendor`, dan aset frontend yang sudah di-build (port host `APP_PORT`, default 8080) |
+| `scheduler` | `php artisan schedule:work` (pengingat tenggat harian)                                                             |
+| `mysql`     | MySQL 8.4; **tidak** dipublikasikan ke host, hanya dapat diakses `app`/`scheduler`                                 |
+
+Prasyarat: Docker Engine dengan Docker Compose v2. Saat build pertama, mesin perlu akses internet ke Docker Hub, Packagist/GitHub (paket Composer), dan registry npm.
+
+### Langkah pertama kali
+
+```bash
+cp .env.example .env
+```
+
+Ubah di `.env` (nilai `DB_HOST`/`DB_CONNECTION`/`DB_PORT` diatur otomatis oleh compose):
+
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=http://localhost:8080   # atau URL/domain sebenarnya
+DB_PASSWORD=isi-kata-sandi-kuat # wajib; dipakai untuk membuat user MySQL
+```
+
+Lalu:
+
+```bash
+docker compose build
+docker compose run --rm --no-deps app php artisan key:generate --show
+# salin keluaran (base64:...) ke APP_KEY di .env
+
+docker compose up -d                                   # migrasi berjalan otomatis
+docker compose exec -u www-data app php artisan zi:install   # organisasi akar + Super Admin
+```
+
+Buka `http://localhost:8080`. Container `app` menolak start bila `APP_KEY` kosong.
+
+### Operasional
+
+| Kebutuhan           | Perintah                                                                                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Status & log        | `docker compose ps`, `docker compose logs -f app`                                                                                                                   |
+| Perintah artisan    | `docker compose exec -u www-data app php artisan <perintah>`                                                                                                        |
+| Update kode         | `git pull && docker compose up -d --build` (migrasi baru dijalankan saat start)                                                                                     |
+| Hentikan            | `docker compose down` (data tetap ada)                                                                                                                              |
+| Backup database     | `docker compose exec mysql sh -c 'MYSQL_PWD="$MYSQL_PASSWORD" exec mysqldump --no-tablespaces --single-transaction -u"$MYSQL_USER" "$MYSQL_DATABASE"' > backup.sql` |
+| Backup berkas bukti | `docker compose cp app:/var/www/html/storage/app/private ./backup-bukti`                                                                                            |
+
+Catatan:
+
+- Data tersimpan di dua volume Docker: `mysql` (database) dan `storage` (berkas bukti dukung, log). **`docker compose down -v` menghapus keduanya secara permanen.**
+- Saat container `app` start: `php artisan migrate --force` (hanya migrasi maju, tidak pernah `fresh`/rollback) lalu `php artisan optimize`. Matikan migrasi otomatis dengan `RUN_MIGRATIONS=false` di `.env`.
+- Konfigurasi di-cache saat start, jadi setelah mengubah `.env` jalankan `docker compose up -d` (container dibuat ulang), bukan sekadar restart proses.
+- Batas unggah PHP di image 25 MB (`docker/php.ini`); bila `ZI_EVIDENCE_MAX_KB` dinaikkan, naikkan juga `upload_max_filesize`/`post_max_size` lalu build ulang.
+- Untuk HTTPS, taruh container di belakang reverse proxy (nginx, Traefik, dsb.). Aplikasi belum mengonfigurasi _trusted proxies_; bila proxy meneruskan header `X-Forwarded-*`, tambahkan `$middleware->trustProxies(at: ...)` di `bootstrap/app.php` dengan alamat proxy Anda.
+- Image dibangun untuk arsitektur mesin build. Di Mac Apple Silicon bila `npm ci` gagal karena paket native, build dengan `DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build`.
 
 ## Akun awal, role, organisasi, dan cakupan
 
